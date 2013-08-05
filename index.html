@@ -1,15 +1,26 @@
-<html>
+<!doctype html>
+<html ng-app>
   <head>
+  	<meta charset="utf-8">
   	<title>Maps</title>
   	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
   	<script src="http://code.angularjs.org/1.0.6/angular.min.js"></script>
   	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   	<script src="js/holeMap.js"></script>
+    <script src="js/controlers.js"></script>
   	<link href="css/holeMap.css" rel="stylesheet" type="text/css">
   </head>
-  </head>
   <body>
-    <div id="mapMenu"></div>
-  	<div id="mapDiv" class="map"></div>
+    <div id="mapMenu">
+      <div ng-controller="CoordInputControler">
+            <form novalidate class="simple-form">
+                <input type="text" ng-model="map.latitude" />,
+                <input type="text" ng-model="map.longitude" />
+                <button ng-click="update(map)">GO</button>
+            </form>
+        </div>
+    </div>
+  	<div id="mapDiv" class="map">
+    </div>
   </body>
 </html>
