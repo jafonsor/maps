@@ -11,14 +11,17 @@
   	<link href="css/holeMap.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div id="mapMenu">
-      <div ng-controller="CoordInputControler">
+    <div id="header" class="header">
+      <div ng-controller="CoordInputController">
             <form novalidate class="simple-form">
                 <input type="text" ng-model="map.latitude" />,
                 <input type="text" ng-model="map.longitude" />
-                <button ng-click="update(map)">GO</button>
+                <button ng-click="update()">GO</button>
             </form>
         </div>
+    </div>
+    <div id="mapMenu" class="mapMenu" ng-controller="MenuController">
+      <button ng-click="placeCenterPlaceHolder()">center</button>
     </div>
   	<div id="mapDiv" class="map">
     </div>
