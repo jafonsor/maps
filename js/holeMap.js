@@ -1,6 +1,6 @@
 var myBingCredentials = "Amidgig8OUx17DagiOFVdMHvUnm4jAu-hKfNyBNcrNOOW2o2_qLGffUdKgrhGnPW";
 var holeMap; // global var were the map object will be stored. this var is initialized whene document is ready.
-var createPin;
+var geolocationProvider; // global var were the GeolocationProvider will be strored.
 
 /**
  * A map of an hole of a golf corse.
@@ -54,7 +54,7 @@ function BingMap(golfCorse, holeNumber, map_div, latitude, longitude, zoom, mapT
 }
 
 BingMap.prototype = Object.create( HoleMap.prototype );
-BingMap.prototype.constructor = HoleMap;
+BingMap.prototype.constructor = BingMap;
 
 
 BingMap.prototype.setCenter = function(latitude,longitude) {
@@ -73,6 +73,14 @@ BingMap.prototype.getZoom = function() {
   return this.map.getZoom();
 }
 
+BingMap.prototype.getPlaceholder = function(label) {
+  return this.placeholders[label];
+}
+
+BingMap.prototype.getMap = function(label) {
+  return this.map;
+}
+
 BingMap.prototype.pushEntitie = function(entitie) {
   this.map.entities.push(entitie);
 }
@@ -83,6 +91,8 @@ BingMap.prototype.addPlaceholder = function(placeholder) {
   this.placeholders[ placeholder.getLabel() ] = placeholder;
   this.pushEntitie(placeholder);
 }
+
+
 
 
 /**
@@ -103,8 +113,8 @@ Placeholder.prototype.constructor = Placeholder;
 /**
  * Function called when the placeholder is droped. It should update the server.
  */
-Placeholder.prototype.saveLocationOnServer = function(e) {
-  console.log("saving location on server: " + e.targetType);
+Placeholder.prototype.saveLocationOnServer = function(event) {
+  console.log("saving location on server: " + event.targetType);
 }
 
 
@@ -113,15 +123,39 @@ Placeholder.prototype.getLabel = function() {
 }
 
 /**
- * Placeholder that only moves along a distance from another placeholder.
+ * Placeholder that draws a circunference with center on centerPlaceholder.
+ * distantce  -  distance in meters from the centerPlaceholder.
  */
 function DistancePlaceholder(location,label,centerPlaceholder,distance) {
-  Placeholder.call(location,label);
+  Placeholder.call(this, location,label);
+
+  this.centerPlaceholder = centerPlaceholder;
+  this.distance = distance;
+
+  Microsoft.Maps.Events.addHandler(this, 'mousedown'/*, this.drawRadius*/);
 }
 
 DistancePlaceholder.prototype = Object.create( Placeholder.prototype );
 DistancePlaceholder.prototype.constructor = DistancePlaceholder;
 
+DistancePlaceholder.prototype.getPlaceholder = function() {
+  return this.centerPlaceholder;
+}
+
+DistancePlaceholder.prototype.getDistance = function() {
+  return this.distance;
+}
+
+DistancePlaceholder.prototype.drawRadius = function(event) {
+  console.log(event.targetType);
+  geolocationProvider.addAccuracyCircle(
+    this.centerPlaceholder.getLocation(),
+    this.distance,
+    30);
+}
+
+
 $(document).ready( function () {
   holeMap = new BingMap('bela vista', 1, document.getElementById("mapDiv"), 38.725731, -9.150210);
+  geolocationProvider = new Microsoft.Maps.GeoLocationProvider(holeMap.getMap());
 });

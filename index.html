@@ -4,25 +4,29 @@
   	<meta charset="utf-8">
   	<title>Maps</title>
   	<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   	<script src="http://code.angularjs.org/1.0.6/angular.min.js"></script>
-  	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  	<script src="js/holeMap.js"></script>
-    <script src="js/controlers.js"></script>
+    <script src="js/holeMap.js"></script>
+  	<script src="js/controlers.js"></script>
   	<link href="css/holeMap.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <div id="header" class="header">
       <div ng-controller="CoordInputController">
-            <form novalidate class="simple-form">
-                <input type="text" ng-model="map.latitude" />,
-                <input type="text" ng-model="map.longitude" />
-                <button ng-click="update()">GO</button>
-            </form>
-            <span>zoom:{{map.zoom}}</span>
-        </div>
+          <form novalidate class="simple-form">
+            <input type="text" ng-model="map.latitude" />,
+            <input type="text" ng-model="map.longitude" />
+            zoom:<input type="text" value="{{zoom}}" ng-model="map.zoom" />
+            <button ng-click="update()">GO</button>
+          </form>
+      </div>
     </div>
     <div id="mapMenu" class="mapMenu" ng-controller="MenuController">
-      <button ng-click="placeCenterPlaceHolder()">center</button>
+      placeholders:
+      <ul>
+        <li><button ng-click="placeCenterPlaceholder()">center</button></li>
+        <li><button ng-click="placeDistancePlaceholder()">distance dependent</button></li>
+      </ul>
     </div>
   	<div id="mapDiv" class="map">
     </div>
